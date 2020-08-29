@@ -1,0 +1,17 @@
+{
+  "name": "@zebrajaeger/filewalker",
+  "version": "1.0.0",
+  "description": "Walk through filesystem",
+  "main": "src/index.js",
+  "scripts": {
+    "deploy": "npm publish --access public"
+  },
+  "keywords": ["file", "walk"],
+  "author": "Lars Brandt",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zebrajaeger/filewalker.git"
+  },
+  "homepage": "https://github.com/zebrajaeger/filewalker/"
+}
