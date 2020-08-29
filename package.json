@@ -1,6 +1,6 @@
 {
   "name": "@zebrajaeger/filewalker",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Walk through filesystem",
   "main": "src/index.js",
   "scripts": {
