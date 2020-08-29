@@ -14,34 +14,34 @@ yarn add @zebrajaeger/filewalker
 ## Example with files and directories
 
 ```javascript
-const {filewalker} = require('@zebrajaeger/filewalker')
+const {walkSync} = require('@zebrajaeger/filewalker')
 
-filewalker.walkSync(
-    './myFileRoot', 
+walkSync(
+    '.', 
     (file) => console.log('File:', file),
     (dir) => console.log('Directory:', dir)
-)
+).then();
 ```
 
 ## Example files only
 
 ```javascript
-const {filewalker} = require('@zebrajaeger/filewalker')
+const {walkSync} = require('@zebrajaeger/filewalker')
 
-filewalker.walkSync(
-    './myFileRoot', 
+walkSync(
+    '.', 
     (file) => console.log('File:', file)
-)
+).then();
 ```
 
 ## Example directories only
 
 ```javascript
-const {filewalker} = require('@zebrajaeger/filewalker')
+const {walkSync} = require('@zebrajaeger/filewalker')
 
-filewalker.walkSync(
-    './myFileRoot',
+walkSync(
+    '.',
     null, 
     (dir) => console.log('Directory:', dir)
-)
+).then();
 ```
