@@ -1,31 +1,62 @@
 const fs = require('fs');
 const path = require('path')
 
-function isDirectory(p) {
-    return fs.lstatSync(p).isDirectory()
-}
+class FileWalker {
+    rootDir_;
 
-function isFile(p) {
-    return fs.lstatSync(p).isFile()
-}
-
-async function walkSync(dir, onFile, onDir) {
-    const res = fs.readdirSync(dir);
-    for (let i = 0; i < res.length; ++i) {
-        const p = path.resolve(dir, res[i])
-        if (isFile(p) && onFile) {
-            await onFile(p);
-        }
+    constructor(rootDir) {
+        this.rootDir_ = rootDir;
     }
-    for (let i = 0; i < res.length; ++i) {
-        const p = path.resolve(dir, res[i])
-        if (isDirectory(p)) {
-            if (onDir) {
-                onDir(p)
+
+    isDirectory(p) {
+        return fs.lstatSync(p).isDirectory()
+    }
+
+    isFile(p) {
+        return fs.lstatSync(p).isFile()
+    }
+
+    async walkRel(rootDir, startDir, onFile, onDir) {
+        const dirItems = fs.readdirSync(startDir);
+
+        for (let i = 0; i < dirItems.length; ++i) {
+            const resPath = path.resolve(startDir, dirItems[i])
+            if (this.isFile(resPath) && onFile) {
+                await onFile({abs: resPath, rel: path.relative(rootDir, resPath)});
             }
-            await walkSync(p, onFile, onDir);
         }
+
+        for (let i = 0; i < dirItems.length; ++i) {
+            const resPath = path.resolve(startDir, dirItems[i])
+            if (this.isDirectory(resPath)) {
+                if (onDir) {
+                    onDir({abs: resPath, rel: path.relative(rootDir, resPath)})
+                }
+                await this.walkRel(rootDir, resPath, onFile, onDir);
+            }
+        }
+    }
+
+    async walk(onFile, onDir, options = {relStart: null, absStart: null}) {
+        const opts = options || {};
+        const relStart = opts.relStart;
+        const absStart = opts.absStart;
+
+        let start = this.rootDir_;
+        if (relStart && absStart) {s
+            throw new Error('Only one of relStart and absStart can be set')
+        }
+
+        if (relStart) {
+            start = path.resolve(this.rootDir_, relStart);
+        }
+
+        if (absStart) {
+            start = absStart;
+        }
+
+        return this.walkRel(this.rootDir_, start, onFile, onDir);
     }
 }
 
-module.exports = {walkSync}
+module.exports = {FileWalker}
