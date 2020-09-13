@@ -25,7 +25,13 @@ class FileWalker {
     }
 
     async walkRel(rootDir, startDir, onFile, onDir) {
-        const dirItems = fs.readdirSync(startDir);
+        let dirItems
+        try {
+            dirItems = fs.readdirSync(startDir);
+        } catch (err) {
+            console.log(`Could not read directory content: '${startDir}'`, err);
+            return;
+        }
 
         for (let i = 0; i < dirItems.length; ++i) {
             const resPath = path.resolve(startDir, dirItems[i])
