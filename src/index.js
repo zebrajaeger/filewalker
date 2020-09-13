@@ -9,11 +9,19 @@ class FileWalker {
     }
 
     isDirectory(p) {
-        return fs.lstatSync(p).isDirectory()
+        try {
+            return fs.lstatSync(p).isDirectory()
+        } catch (err) {
+            console.log(`Could not check if directory: '${p}'`, err);
+        }
     }
 
     isFile(p) {
-        return fs.lstatSync(p).isFile()
+        try {
+            return fs.lstatSync(p).isFile()
+        } catch (err) {
+            console.log(`Could not check if file: '${p}'`, err);
+        }
     }
 
     async walkRel(rootDir, startDir, onFile, onDir) {
@@ -43,7 +51,8 @@ class FileWalker {
         const absStart = opts.absStart;
 
         let start = this.rootDir_;
-        if (relStart && absStart) {s
+        if (relStart && absStart) {
+            s
             throw new Error('Only one of relStart and absStart can be set')
         }
 
